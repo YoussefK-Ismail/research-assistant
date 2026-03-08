@@ -4,12 +4,14 @@ Built with GROQ API + Streamlit
 Project 8 - Youssef Khaled Ismail
 """
 
+import subprocess, sys
+subprocess.run([sys.executable, '-m', 'pip', 'install', 'groq==0.9.0', '-q'], check=False)
+
 import streamlit as st
 import json
 from datetime import datetime
 from typing import List, Dict
 from groq import Groq
-
 
 st.set_page_config(page_title="Academic Research Assistant", page_icon="🎓", layout="wide", initial_sidebar_state="expanded")
 
