@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import List, Dict
 from groq import Groq
 
+
 st.set_page_config(page_title="Academic Research Assistant", page_icon="🎓", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""<style>
