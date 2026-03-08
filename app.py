@@ -12,7 +12,6 @@ from typing import List, Dict
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_core.tools import tool
-from langgraph.prebuilt import create_react_agent
 
 st.set_page_config(
     page_title="Academic Research Assistant",
