@@ -4,14 +4,28 @@ Built with GROQ API + Streamlit
 Project 8 - Youssef Khaled Ismail
 """
 
-import subprocess, sys
-subprocess.run([sys.executable, '-m', 'pip', 'install', 'groq==0.9.0', '-q'], check=False)
-
 import streamlit as st
 import json
+import requests
 from datetime import datetime
 from typing import List, Dict
-from groq import Groq
+
+def call_groq(api_key: str, system: str, user: str, history=None) -> str:
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    messages = [{"role": "system", "content": system}]
+    if history:
+        messages.extend(history[-6:])
+    messages.append({"role": "user", "content": user})
+    resp = requests.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        headers=headers,
+        json={"model": "llama-3.3-70b-versatile", "messages": messages, "temperature": 0.3, "max_tokens": 2000}
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
 
 st.set_page_config(page_title="Academic Research Assistant", page_icon="🎓", layout="wide", initial_sidebar_state="expanded")
 
@@ -76,14 +90,7 @@ def get_developments(query: str) -> str:
             return dev
     return "Active research field with significant 2023-2024 publications."
 
-def call_groq(api_key: str, system: str, user: str, history=None) -> str:
-    client = Groq(api_key=api_key)
-    messages = [{"role": "system", "content": system}]
-    if history:
-        messages.extend(history[-6:])
-    messages.append({"role": "user", "content": user})
-    resp = client.chat.completions.create(model="llama-3.3-70b-versatile", messages=messages, temperature=0.3, max_tokens=2000)
-    return resp.choices[0].message.content
+
 
 def get_research_response(api_key, query, history, report_format, depth):
     papers = search_papers(query)
